@@ -24,14 +24,55 @@ import android.os.Bundle;
 
 /**
  * This class sets the FLAG_SECURE flag on the window to make the app
- *  private when shown in the task switcher
+ * private when shown in the task switcher
  */
 public class PrivacyScreenPlugin extends CordovaPlugin {
 
-  @Override
-  public void initialize(CordovaInterface cordova, CordovaWebView webView) {
-    super.initialize(cordova, webView);
-    Activity activity = this.cordova.getActivity();
-    activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
-  }
+	@Override
+	public void initialize(CordovaInterface cordova, CordovaWebView webView) {
+		super.initialize(cordova, webView);
+		enable(this.cordova.getActivity());
+	}
+
+	@Override
+	public boolean execute(String action, JSONArray data, final CallbackContext callbackContext) throws JSONException {
+		final Activity activity = this.cordova.getActivity();
+
+		if (action.equals("enable")) {
+			activity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					enable(activity);
+					callbackContext.success();
+				}
+			});
+
+			return true;
+		}
+		
+		if (action.equals("disable")) {
+			activity.runOnUiThread(new Runnable() {
+				@Override
+				public void run() {
+					disable(activity);
+					callbackContext.success();
+				}
+			});
+
+			return true;
+		}
+
+
+		return false;
+	}
+	
+	
+	private void enable(Activity activity) {
+		activity.getWindow().addFlags(WindowManager.LayoutParams.FLAG_SECURE);
+	}
+	
+	private void disable(Activity activity) {
+		activity.getWindow().clearFlags(WindowManager.LayoutParams.FLAG_SECURE);
+	}
+
 }
