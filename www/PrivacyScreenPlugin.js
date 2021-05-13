@@ -1,15 +1,11 @@
 var exec = require("cordova/exec");
 
-var PLUGIN_NAME = "PrivacyScreenPlugin";
+var PLUGIN_NAME = "PrivacyScreen";
 
-var PrivacyScreenPlugin = {
-	enable: function (success, error) {
-		exec(success, error, PLUGIN_NAME, "enable", []);
-	},
+exports.enable = function (success, error) {
+	exec(success, error, PLUGIN_NAME, "enable", []);
+};
 
-	disable: function (success, error) {
-		exec(success, error, PLUGIN_NAME, "disable", []);
-	}
-}
-
-module.exports = PrivacyScreenPlugin;
+exports.disable: function (success, error) {
+	exec(success, error, PLUGIN_NAME, "disable", []);
+};
